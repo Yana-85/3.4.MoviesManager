@@ -4,28 +4,41 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.netology.domain.MovieList;
+import ru.netology.repository.AfishaRepository;
 
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class MovieManager {
-    private MovieList[] movies = new MovieList[0];
+public class AfishaManager {
+    private AfishaRepository repository;
     private int quantityMovies = 10;
 
-    public MovieManager(int quantityMovies) {
+    public AfishaManager(int quantityMovies) {
         this.quantityMovies = quantityMovies;
     }
 
-    public void add(MovieList movie) {
-        int resultLength = movies.length + 1;
-        MovieList[] tmp = new MovieList[resultLength];
-        System.arraycopy(movies, 0, tmp, 0, movies.length);
-        int lastIndex = tmp.length - 1;
-        tmp[lastIndex] = movie;
-        movies = tmp;
+    public AfishaManager(AfishaRepository repository) {
+        this.repository = repository;
     }
 
-    public MovieList[] getMovies() {
+    public void add(MovieList movie) {
+        repository.save(movie);
+    }
+
+    public void removeById(int id) {
+        repository.removeById(id);
+    }
+
+    public void findById(int id) {
+        repository.findById(id);
+    }
+
+    public void removeAll() {
+        repository.removeAll();
+    }
+
+    public MovieList[] getAll() {
+        MovieList[] movies = repository.findAll();
         int resultLength = quantityMovies;
         if (movies.length < resultLength)
             resultLength = movies.length;
@@ -37,4 +50,7 @@ public class MovieManager {
         return result;
     }
 }
+
+
+
 
